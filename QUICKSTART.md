@@ -9,7 +9,7 @@ pip install -r requirements.txt
 ```
 
 This will install:
-- openai (for translation)
+- google-generativeai (for translation)
 - sentence-transformers (for embeddings)
 - numpy, scikit-learn (for calculations)
 - matplotlib (for visualization)
@@ -23,12 +23,12 @@ This will install:
 cp .env.template .env
 ```
 
-2. Edit `.env` and add your OpenAI API key:
+2. Edit `.env` and add your Google Gemini API key:
 ```bash
-OPENAI_API_KEY=sk-your-actual-api-key-here
+GOOGLE_API_KEY=your-actual-api-key-here
 ```
 
-Get your API key from: https://platform.openai.com/api-keys
+Get your API key from: https://aistudio.google.com/app/apikey
 
 ## Step 3: Test the Setup (Optional but Recommended)
 
@@ -58,7 +58,7 @@ This will:
 - Save results to `./results/` directory
 
 **Time**: 15-30 minutes
-**Cost**: ~$0.50-$2.00 (using gpt-4o-mini)
+**Cost**: Free tier available (using Gemini API)
 
 ## Step 5: View Results
 
@@ -99,10 +99,10 @@ python -c "import json; data=json.load(open('results/translation_results.json'))
 
 ## Troubleshooting
 
-### "Missing OpenAI API key"
+### "Missing Google API key"
 Make sure `.env` file exists and contains:
 ```
-OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=your-api-key-here
 ```
 
 ### "Module not found"
@@ -122,7 +122,7 @@ Edit `config.py`:
 ```python
 NUM_SENTENCES = 50          # Fewer sentences = faster
 AGENT_TIMEOUT = 90          # Increase if timeouts occur
-TRANSLATION_MODEL = "gpt-3.5-turbo"  # Cheaper/faster model
+TRANSLATION_MODEL = "gemini-1.5-flash"  # Faster model
 ```
 
 ## What's Next?

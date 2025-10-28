@@ -30,7 +30,7 @@ Each sentence goes through this complete cycle, and the original and final Engli
 ### Prerequisites
 
 - Python 3.8 or higher
-- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Google Gemini API key ([Get one here](https://aistudio.google.com/app/apikey))
 
 ### Setup
 
@@ -46,8 +46,8 @@ pip install -r requirements.txt
 # Copy the template
 cp .env.template .env
 
-# Edit .env and add your OpenAI API key
-# OPENAI_API_KEY=sk-...
+# Edit .env and add your Google Gemini API key
+# GOOGLE_API_KEY=your-api-key-here
 ```
 
 ## Usage
@@ -83,7 +83,7 @@ MAX_RETRIES = 3           # Maximum retry attempts
 RETRY_DELAY = 2           # Seconds between retries
 
 # Models
-TRANSLATION_MODEL = "gpt-4o-mini"  # OpenAI model for translation
+TRANSLATION_MODEL = "gemini-2.0-flash-exp"  # Gemini API model for translation
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 ```
 
@@ -246,18 +246,18 @@ Partial results saved to: results/partial_results_47_sentences.json
 
 ## Cost Estimation
 
-Using OpenAI's GPT-4o-mini:
+Using Google Gemini API:
 - **Per sentence**: 3 API calls (EN→RU, RU→HE, HE→EN)
 - **100 sentences**: ~300 API calls
-- **Estimated cost**: $0.50 - $2.00 (varies by model and sentence length)
+- **Estimated cost**: Free tier available, check current Gemini API pricing for accurate estimates
 
-*Note: Check current OpenAI pricing for accurate estimates*
+*Note: Gemini API offers generous free tier limits*
 
 ## Troubleshooting
 
-### "Missing OpenAI API key"
-- Ensure `.env` file exists with valid `OPENAI_API_KEY`
-- Or set environment variable: `export OPENAI_API_KEY=sk-...`
+### "Missing Google API key"
+- Ensure `.env` file exists with valid `GOOGLE_API_KEY`
+- Or set environment variable: `export GOOGLE_API_KEY=your-api-key-here`
 
 ### "Timeout after 3 attempts"
 - Increase `AGENT_TIMEOUT` in `config.py`
@@ -266,7 +266,7 @@ Using OpenAI's GPT-4o-mini:
 
 ### "Model not found"
 - Update `TRANSLATION_MODEL` in `config.py`
-- Use supported OpenAI models: `gpt-4o-mini`, `gpt-4o`, `gpt-3.5-turbo`
+- Use supported Gemini API models: `gemini-2.0-flash-exp`, `gemini-1.5-pro`, `gemini-1.5-flash`
 
 ### Embedding model download fails
 - Ensure internet connection
@@ -356,7 +356,7 @@ For issues, questions, or suggestions:
 
 ## Acknowledgments
 
-- OpenAI GPT models for translation
+- Google Gemini API for translation
 - Sentence Transformers for embeddings
 - scikit-learn for similarity calculations
 - matplotlib for visualization

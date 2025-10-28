@@ -129,7 +129,7 @@ Edit `config.py` to customize:
 | `MAX_WORDS` | 20 | Maximum words per sentence |
 | `AGENT_TIMEOUT` | 60 | Timeout in seconds |
 | `MAX_RETRIES` | 3 | Maximum retry attempts |
-| `TRANSLATION_MODEL` | gpt-4o-mini | OpenAI model to use |
+| `TRANSLATION_MODEL` | gemini-2.0-flash-exp | Gemini API model to use |
 | `EMBEDDING_MODEL` | all-MiniLM-L6-v2 | Sentence transformer model |
 
 ## 📈 Expected Results
@@ -161,7 +161,7 @@ Edit `config.py` to customize:
 
 ### translation_agents.py
 - Three specialized agents (EN→RU, RU→HE, HE→EN)
-- Uses OpenAI Chat Completions API
+- Uses Gemini API for translations
 - Temperature=0 for deterministic results
 - Clean output handling
 
@@ -222,7 +222,7 @@ Edit `config.py` to customize:
 
 | Issue | Solution |
 |-------|----------|
-| API key error | Set `OPENAI_API_KEY` in `.env` |
+| API key error | Set `GOOGLE_API_KEY` in `.env` |
 | Timeout errors | Increase `AGENT_TIMEOUT` in config |
 | Rate limits | Add delays, use different API key |
 | Memory issues | Reduce `NUM_SENTENCES` |
@@ -275,7 +275,7 @@ This project demonstrates:
 - Production-grade error handling
 
 Built with:
-- OpenAI GPT models
+- Google Gemini API models
 - Sentence Transformers
 - scikit-learn
 - matplotlib

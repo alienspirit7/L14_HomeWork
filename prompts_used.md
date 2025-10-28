@@ -8,9 +8,9 @@ This document summarizes all user prompts and the corresponding action items com
 
 **Date:** 2025-10-29
 **Project:** Translation Quality Assessment Pipeline
-**Total Prompts:** 4
+**Total Prompts:** 9
 **Files Created:** 18
-**Files Modified:** 7
+**Files Modified:** 13
 
 ---
 
@@ -533,6 +533,139 @@ open results/distance_plot.png
 4. **Documentation** - Multiple docs needed: technical (PRD), user (README), quick (QUICKSTART)
 5. **Error Handling** - Timeout + retry essential for production reliability
 6. **Testing** - Mini pipeline (2-3 sentences) invaluable for quick iteration
+
+---
+
+## Prompt 7: Documentation Cleanup
+
+### User Prompt:
+```
+Go through all the md files and see where it is still mentioning openai and change it to Gemini api usage
+```
+
+### Action Items Completed:
+
+#### 1. PROJECT_OVERVIEW.md
+- [x] Updated model reference: `gpt-4o-mini` → `gemini-2.0-flash-exp`
+- [x] Changed API description: "Uses OpenAI Chat Completions API" → "Uses Gemini API for translations"
+- [x] Updated troubleshooting: `OPENAI_API_KEY` → `GOOGLE_API_KEY`
+- [x] Updated acknowledgments: "OpenAI GPT models" → "Google Gemini API models"
+
+#### 2. README.md
+- [x] Updated prerequisites: OpenAI API key → Google Gemini API key
+- [x] Changed API key URL: platform.openai.com → aistudio.google.com
+- [x] Updated configuration example: `OPENAI_API_KEY` → `GOOGLE_API_KEY`
+- [x] Modified model configuration: `gpt-4o-mini` → `gemini-2.0-flash-exp`
+- [x] Updated cost estimation section for Gemini free tier
+- [x] Changed troubleshooting sections
+- [x] Updated supported models list to Gemini models
+- [x] Updated acknowledgments section
+
+#### 3. QUICKSTART.md
+- [x] Changed dependency: `openai` → `google-generativeai`
+- [x] Updated API key setup instructions
+- [x] Changed API key URL to Google AI Studio
+- [x] Modified cost information to reflect free tier
+- [x] Updated troubleshooting: "Missing OpenAI API key" → "Missing Google API key"
+- [x] Changed model examples to Gemini models
+
+#### 4. PRD_Translation_Pipeline.md
+- [x] Updated technology stack: "OpenAI API" → "Google Gemini API"
+- [x] Changed dependencies: `openai` → `google-generativeai`
+- [x] Updated external services section
+
+#### 5. MIGRATION_SUMMARY.md
+- [x] **No changes needed** - Intentionally preserves historical OpenAI references as documentation of the migration
+
+### Results:
+✅ All active documentation now references Gemini API
+✅ Historical references preserved in MIGRATION_SUMMARY.md
+✅ Consistent API documentation across all files
+✅ Updated setup instructions and examples
+
+---
+
+## Prompt 8: Git Ignore Enhancement
+
+### User Prompt:
+```
+add all the files created after run to gitignore list
+```
+
+### Action Items Completed:
+
+#### 1. .gitignore Updated
+- [x] Added `myenv/` to Python virtual environments section
+  - Previously showing as untracked in git status
+  - Now properly ignored with other venvs (env/, venv/, ENV/)
+
+#### 2. Already Covered (verified)
+- [x] `.env` - Environment variables with API keys
+- [x] `results/` - All pipeline output directory
+- [x] `*.json` - JSON result files
+- [x] `*.png` - Visualization/plot files
+- [x] `*.pdf` - PDF exports
+- [x] `.cache/` - Model caches
+- [x] `sentence_transformers/` - Model cache directory
+- [x] `*.log` - Log files
+- [x] `__pycache__/` - Python cache
+- [x] Python artifacts (*.pyc, *.pyo, etc.)
+
+### Files Protected:
+**Generated during pipeline execution:**
+- `results/translation_results.json`
+- `results/distance_plot.png`
+- `results/intermediate_results_*.json`
+- `results/partial_results_*.json`
+- `.cache/` directory
+- `sentence_transformers/` model cache
+
+**Development artifacts:**
+- `myenv/` virtual environment
+- `__pycache__/` directories
+- `*.pyc` compiled Python files
+
+### Results:
+✅ All runtime-generated files properly ignored
+✅ Virtual environment excluded from git
+✅ API keys and sensitive data protected
+✅ Clean git status (only source files tracked)
+
+---
+
+## Prompt 9: Meta Documentation
+
+### User Prompt:
+```
+add recent propmpts to the prompts used md file
+```
+
+### Action Items Completed:
+- [x] **prompts_used.md** - Updated this document
+  - Added Prompt 7: Documentation Cleanup
+  - Added Prompt 8: Git Ignore Enhancement
+  - Added Prompt 9: Meta Documentation (this entry)
+  - Updated statistics and file counts
+  - Maintained consistent documentation format
+
+---
+
+## Updated Statistics
+
+### Total Prompts: **9**
+### Total Files: **18**
+- Core application: 8 Python modules
+- Configuration: 3 files
+- Documentation: 6 markdown files
+- User-created: 1 file (.env)
+
+### Files Modified This Session:
+- PROJECT_OVERVIEW.md - Gemini API references
+- README.md - Gemini API references
+- QUICKSTART.md - Gemini API references
+- PRD_Translation_Pipeline.md - Gemini API references
+- .gitignore - Added myenv/
+- prompts_used.md - This file
 
 ---
 

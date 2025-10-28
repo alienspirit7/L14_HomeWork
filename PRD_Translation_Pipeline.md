@@ -199,7 +199,7 @@ CONFIG = {
 
 **Recommended Technologies:**
 - **Language**: Python 3.8+
-- **Translation Agents**: OpenAI API, Anthropic Claude, or Google Translate API
+- **Translation Agents**: Google Gemini API, Anthropic Claude, or Google Translate API
 - **Embeddings**: sentence-transformers library
 - **Similarity**: scikit-learn (cosine_similarity) or NumPy
 - **Visualization**: matplotlib or plotly
@@ -362,11 +362,11 @@ The following items are explicitly out of scope for this version:
 ## 10. Dependencies
 
 ### 10.1 External Services
-- Translation API access (OpenAI, Anthropic, Google, or similar)
+- Translation API access (Google Gemini API, Anthropic, or similar)
 - API keys and authentication
 
 ### 10.2 Python Libraries
-- `openai` or `anthropic` (for translation agents)
+- `google-generativeai` or `anthropic` (for translation agents)
 - `sentence-transformers` (for embeddings)
 - `numpy` (for vector operations)
 - `scikit-learn` (for cosine similarity)
