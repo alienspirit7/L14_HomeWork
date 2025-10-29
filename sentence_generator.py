@@ -1,39 +1,52 @@
 """
 Sentence Generator Module
 Generates English sentences for translation quality assessment.
+Supports both Gemini and Anthropic APIs.
 """
 
 import random
 from typing import List
 import google.generativeai as genai
+from anthropic import Anthropic
 import config
 
 
 class SentenceGenerator:
     """Generates diverse English sentences of specified word length."""
 
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str = None, provider: str = None):
         """
         Initialize the sentence generator.
 
         Args:
-            api_key: Google API key (uses config if not provided)
+            api_key: API key (uses config if not provided)
+            provider: API provider ("gemini" or "anthropic")
         """
-        self.api_key = api_key or config.GOOGLE_API_KEY
+        self.provider = provider or config.API_PROVIDER
+
+        # Get appropriate API key based on provider
+        if self.provider == "gemini":
+            self.api_key = api_key or config.GOOGLE_API_KEY
+        elif self.provider == "anthropic":
+            self.api_key = api_key or config.ANTHROPIC_API_KEY
+        else:
+            raise ValueError(f"Unsupported provider: {self.provider}")
+
         if not self.api_key:
-            raise ValueError("Google API key is required")
+            raise ValueError(f"API key is required for provider {self.provider}")
 
-        # Configure Gemini API
-        genai.configure(api_key=self.api_key)
-
-        # Initialize the model
-        self.model = genai.GenerativeModel(
-            model_name=config.TRANSLATION_MODEL,
-            generation_config={
-                "temperature": 0.7,  # Some creativity for diversity
-                "max_output_tokens": 4000,
-            }
-        )
+        # Initialize the appropriate API client
+        if self.provider == "gemini":
+            genai.configure(api_key=self.api_key)
+            self.model = genai.GenerativeModel(
+                model_name=config.TRANSLATION_MODEL,
+                generation_config={
+                    "temperature": 0.7,  # Some creativity for diversity
+                    "max_output_tokens": 4000,
+                }
+            )
+        elif self.provider == "anthropic":
+            self.client = Anthropic(api_key=self.api_key)
 
     def generate_sentences(self,
                           num_sentences: int = 100,
@@ -61,8 +74,20 @@ Return ONLY the sentences, one per line, numbered from 1 to {num_sentences}.
 Format: "1. [sentence]" on each line."""
 
         try:
-            response = self.model.generate_content(prompt)
-            content = response.text.strip()
+            if self.provider == "gemini":
+                response = self.model.generate_content(prompt)
+                content = response.text.strip()
+            elif self.provider == "anthropic":
+                response = self.client.messages.create(
+                    model=config.TRANSLATION_MODEL,
+                    max_tokens=4000,
+                    temperature=0.7,
+                    messages=[{
+                        "role": "user",
+                        "content": prompt
+                    }]
+                )
+                content = response.content[0].text.strip()
 
             # Parse sentences from numbered list
             sentences = []
@@ -104,17 +129,29 @@ Each sentence should be between {min_words} and {max_words} words long.
 Return ONLY the sentences, one per line, without numbering."""
 
         try:
-            # Create a new model instance with higher temperature for more diversity
-            model = genai.GenerativeModel(
-                model_name=config.TRANSLATION_MODEL,
-                generation_config={
-                    "temperature": 0.8,
-                    "max_output_tokens": 2000,
-                }
-            )
+            if self.provider == "gemini":
+                # Create a new model instance with higher temperature for more diversity
+                model = genai.GenerativeModel(
+                    model_name=config.TRANSLATION_MODEL,
+                    generation_config={
+                        "temperature": 0.8,
+                        "max_output_tokens": 2000,
+                    }
+                )
+                response = model.generate_content(prompt)
+                content = response.text.strip()
+            elif self.provider == "anthropic":
+                response = self.client.messages.create(
+                    model=config.TRANSLATION_MODEL,
+                    max_tokens=2000,
+                    temperature=0.8,
+                    messages=[{
+                        "role": "user",
+                        "content": prompt
+                    }]
+                )
+                content = response.content[0].text.strip()
 
-            response = model.generate_content(prompt)
-            content = response.text.strip()
             sentences = [s.strip() for s in content.split('\n') if s.strip()]
 
             # Validate word count

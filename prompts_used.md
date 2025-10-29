@@ -650,9 +650,164 @@ add recent propmpts to the prompts used md file
 
 ---
 
+## Prompt 10: Multi-Provider API Support & Wait Time
+
+### User Prompt:
+```
+Add option to choose anthropic api instead, add wait time between sentences - 1 minute
+```
+
+### Action Items Completed:
+
+#### 1. config.py - API Provider & Wait Time Configuration
+- [x] Added `ANTHROPIC_API_KEY` environment variable
+- [x] Added `API_PROVIDER` configuration option (gemini/anthropic)
+- [x] Added `GEMINI_MODEL` configuration: "gemini-2.0-flash-exp"
+- [x] Added `ANTHROPIC_MODEL` configuration: "claude-3-5-sonnet-20241022"
+- [x] Added dynamic model selection based on provider
+- [x] Added `WAIT_TIME_BETWEEN_SENTENCES`: 60 seconds (1 minute)
+
+#### 2. translation_agents.py - Multi-Provider Support
+- [x] **Major refactor** - Added support for both Gemini and Anthropic APIs
+- [x] Updated module docstring to reflect dual API support
+- [x] Added `from anthropic import Anthropic` import
+- [x] Updated `TranslationAgent.__init__()` to accept `provider` parameter
+- [x] Added provider-based API key selection logic
+- [x] Added Anthropic client initialization alongside Gemini
+- [x] Updated `translate()` method with conditional API calls:
+  - Gemini: `model.generate_content()`
+  - Anthropic: `client.messages.create()`
+- [x] Updated all three agent classes to accept `provider` parameter:
+  - `EnglishToRussianAgent`
+  - `RussianToHebrewAgent`
+  - `HebrewToEnglishAgent`
+- [x] Updated `TranslationPipeline` class to support provider selection
+
+#### 3. sentence_generator.py - Multi-Provider Support
+- [x] **Major refactor** - Added support for both Gemini and Anthropic APIs
+- [x] Updated module docstring
+- [x] Added `from anthropic import Anthropic` import
+- [x] Updated `__init__()` to accept `provider` parameter
+- [x] Added provider-based API key selection
+- [x] Added Anthropic client initialization
+- [x] Updated `generate_sentences()` with conditional API calls
+- [x] Updated `_generate_additional_sentences()` with conditional API calls
+
+#### 4. pipeline.py - Wait Time Implementation
+- [x] Added 1-minute wait time between sentences (lines 161-164)
+- [x] Added logic to skip wait after the last sentence
+- [x] Added informative message: "Waiting {X} seconds before next sentence..."
+- [x] Used `time.sleep(config.WAIT_TIME_BETWEEN_SENTENCES)`
+
+#### 5. main.py - Provider Validation & Time Estimation
+- [x] Updated module docstring with both API requirements
+- [x] Updated `check_prerequisites()` function:
+  - Added provider-based API key validation
+  - Added provider display in output
+  - Added error handling for invalid provider
+- [x] Updated `print_configuration()`:
+  - Added wait time display
+- [x] Updated `main()` function:
+  - Added wait time to estimated duration calculation
+  - Added separate line showing wait time contribution
+
+#### 6. requirements.txt - Anthropic Package
+- [x] Added `anthropic>=0.18.0` dependency
+
+#### 7. .env.template - Multi-Provider Configuration
+- [x] Added `API_PROVIDER` configuration (gemini/anthropic)
+- [x] Added `ANTHROPIC_API_KEY` field
+- [x] Added Anthropic console URL: https://console.anthropic.com/account/keys
+- [x] Updated documentation to clarify provider-specific requirements
+
+### Technical Implementation Details:
+
+**API Call Patterns:**
+
+**Gemini:**
+```python
+response = self.model.generate_content(prompt)
+translation = response.text.strip()
+```
+
+**Anthropic:**
+```python
+response = self.client.messages.create(
+    model=self.model_name,
+    max_tokens=500,
+    temperature=config.TEMPERATURE,
+    messages=[{"role": "user", "content": prompt}]
+)
+translation = response.content[0].text.strip()
+```
+
+**Wait Time Logic:**
+```python
+if idx < len(sentences) and config.WAIT_TIME_BETWEEN_SENTENCES > 0:
+    print(f"\n  Waiting {config.WAIT_TIME_BETWEEN_SENTENCES} seconds...")
+    time.sleep(config.WAIT_TIME_BETWEEN_SENTENCES)
+```
+
+### Configuration Examples:
+
+**Using Gemini:**
+```env
+API_PROVIDER=gemini
+GOOGLE_API_KEY=your_google_api_key_here
+```
+
+**Using Anthropic:**
+```env
+API_PROVIDER=anthropic
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+```
+
+### Results:
+✅ Full support for both Gemini and Anthropic APIs
+✅ Seamless provider switching via configuration
+✅ 1-minute wait time between sentences implemented
+✅ Smart wait logic (skips after last sentence)
+✅ Updated time estimates include wait time
+✅ Proper API key validation per provider
+✅ All translation and generation functions support both providers
+
+### Files Modified: **7**
+- config.py
+- translation_agents.py (major refactor)
+- sentence_generator.py (major refactor)
+- pipeline.py
+- main.py
+- requirements.txt
+- .env.template
+
+### Code Changes:
+- Lines added: ~150
+- API integrations: 2 providers
+- Conditional logic points: 8+
+- New configuration options: 4
+
+---
+
+## Prompt 11: Documentation Update
+
+### User Prompt:
+```
+update prompts file with recent prompts in this conversation
+```
+
+### Action Items Completed:
+- [x] **prompts_used.md** - Updated this document
+  - Added Prompt 10: Multi-Provider API Support & Wait Time
+  - Added Prompt 11: Documentation Update (this entry)
+  - Updated statistics to reflect new changes
+  - Documented all technical implementation details
+  - Added configuration examples for both providers
+
+---
+
 ## Updated Statistics
 
-### Total Prompts: **9**
+### Total Prompts: **11**
 ### Total Files: **18**
 - Core application: 8 Python modules
 - Configuration: 3 files
@@ -660,12 +815,22 @@ add recent propmpts to the prompts used md file
 - User-created: 1 file (.env)
 
 ### Files Modified This Session:
-- PROJECT_OVERVIEW.md - Gemini API references
-- README.md - Gemini API references
-- QUICKSTART.md - Gemini API references
-- PRD_Translation_Pipeline.md - Gemini API references
-- .gitignore - Added myenv/
+- config.py - Added multi-provider support and wait time
+- translation_agents.py - Major refactor for dual API support
+- sentence_generator.py - Major refactor for dual API support
+- pipeline.py - Added 1-minute wait between sentences
+- main.py - Updated validation and time estimation
+- requirements.txt - Added anthropic package
+- .env.template - Added multi-provider configuration
 - prompts_used.md - This file
+
+### Recent Session Summary:
+**Major Enhancement:** Multi-Provider API Support
+- Added Anthropic Claude API as alternative to Gemini
+- Implemented configurable provider selection
+- Added 1-minute wait time between sentences
+- Updated all generation and translation code
+- Maintained backward compatibility
 
 ---
 
@@ -675,19 +840,39 @@ add recent propmpts to the prompts used md file
 
 - All requirements implemented
 - Migration to Gemini successful
+- **NEW:** Anthropic Claude API support added
+- **NEW:** Configurable wait time between sentences
 - Comprehensive documentation
 - Tested and validated
 - Ready for immediate use
 
 **Next User Action:**
+
+**Option 1 - Using Gemini (Free Tier):**
 1. Get Google AI API key from https://aistudio.google.com/app/apikey
-2. Add to `.env` file: `GOOGLE_API_KEY=your_key`
+2. In `.env` file set:
+   ```
+   API_PROVIDER=gemini
+   GOOGLE_API_KEY=your_key
+   ```
+3. Install dependencies: `pip install -r requirements.txt`
+4. Run: `python main.py`
+
+**Option 2 - Using Anthropic Claude:**
+1. Get Anthropic API key from https://console.anthropic.com/account/keys
+2. In `.env` file set:
+   ```
+   API_PROVIDER=anthropic
+   ANTHROPIC_API_KEY=your_key
+   ```
 3. Install dependencies: `pip install -r requirements.txt`
 4. Run: `python main.py`
 
 ---
 
 **Document Created:** 2025-10-29
-**Total Development Time:** ~2-3 hours
+**Last Updated:** 2025-10-29
+**Total Development Time:** ~3-4 hours
 **Quality:** Production-ready
 **Maintenance:** Documented and testable
+**API Providers:** 2 (Gemini, Anthropic)

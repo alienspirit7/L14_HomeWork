@@ -158,6 +158,11 @@ class TranslationQualityPipeline:
                 if config.SAVE_INTERMEDIATE and idx % 10 == 0:
                     self._save_intermediate_results(idx)
 
+                # Wait between sentences (skip wait after the last sentence)
+                if idx < len(sentences) and config.WAIT_TIME_BETWEEN_SENTENCES > 0:
+                    print(f"\n  Waiting {config.WAIT_TIME_BETWEEN_SENTENCES} seconds before next sentence...")
+                    time.sleep(config.WAIT_TIME_BETWEEN_SENTENCES)
+
             except (AgentTimeoutError, AgentMaxRetriesError) as e:
                 print(f"\n  ✗ Failed: {str(e)}")
                 raise
