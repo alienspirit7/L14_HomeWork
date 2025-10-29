@@ -165,19 +165,22 @@ Each agent must implement:
 - **Error Reporting**: Detailed error messages
 
 #### Agent 1: English → Russian
-- **Model**: Professional translation model or API
+- **Model**: Google Gemini API or Anthropic Claude API (configurable)
 - **Language Pair**: en → ru
 - **Specialty**: Technical and general text
+- **Default**: Gemini 2.0 Flash
 
 #### Agent 2: Russian → Hebrew
-- **Model**: Professional translation model or API
+- **Model**: Google Gemini API or Anthropic Claude API (configurable)
 - **Language Pair**: ru → he
 - **Specialty**: Technical and general text
+- **Default**: Gemini 2.0 Flash
 
 #### Agent 3: Hebrew → English
-- **Model**: Professional translation model or API
+- **Model**: Google Gemini API or Anthropic Claude API (configurable)
 - **Language Pair**: he → en
 - **Specialty**: Technical and general text
+- **Default**: Gemini 2.0 Flash
 
 ### 5.4 Configuration Parameters
 
@@ -199,11 +202,17 @@ CONFIG = {
 
 **Recommended Technologies:**
 - **Language**: Python 3.8+
-- **Translation Agents**: Google Gemini API, Anthropic Claude, or Google Translate API
-- **Embeddings**: sentence-transformers library
-- **Similarity**: scikit-learn (cosine_similarity) or NumPy
-- **Visualization**: matplotlib or plotly
-- **Data Storage**: JSON or CSV for results
+- **Translation API Providers** (user-configurable):
+  - **Google Gemini API** (default, free tier available)
+    - Model: gemini-2.0-flash-exp
+    - Cost: FREE up to 1,500 requests/day
+  - **Anthropic Claude API** (alternative)
+    - Model: claude-3-5-sonnet-20241022
+    - Cost: Pay-as-you-go (~$0.10-$0.30 for 30 sentences)
+- **Embeddings**: sentence-transformers library (all-MiniLM-L6-v2)
+- **Similarity**: scikit-learn (cosine_similarity)
+- **Visualization**: matplotlib
+- **Data Storage**: JSON for results
 - **Progress Tracking**: tqdm library
 
 ## 6. Detailed Workflow
@@ -357,16 +366,25 @@ The following items are explicitly out of scope for this version:
 - Quality assessment beyond cosine distance
 - Human evaluation of translations
 - Translation model training or fine-tuning
-- Cost optimization for API calls
+- Cost optimization for API calls (implemented: configurable wait times and provider selection)
 
 ## 10. Dependencies
 
 ### 10.1 External Services
-- Translation API access (Google Gemini API, Anthropic, or similar)
-- API keys and authentication
+- **Translation API access** (configurable via API_PROVIDER):
+  - **Google Gemini API** (primary)
+    - API Key: GOOGLE_API_KEY
+    - Free tier: 1,500 requests/day
+    - Get key: https://aistudio.google.com/app/apikey
+  - **Anthropic Claude API** (alternative)
+    - API Key: ANTHROPIC_API_KEY
+    - Pay-as-you-go pricing
+    - Get key: https://console.anthropic.com/account/keys
+- API authentication managed via environment variables
 
 ### 10.2 Python Libraries
-- `google-generativeai` or `anthropic` (for translation agents)
+- `google-generativeai` (for Gemini translation agents)
+- `anthropic` (for Claude translation agents)
 - `sentence-transformers` (for embeddings)
 - `numpy` (for vector operations)
 - `scikit-learn` (for cosine similarity)
@@ -378,11 +396,12 @@ The following items are explicitly out of scope for this version:
 
 | Risk | Impact | Probability | Mitigation |
 |------|--------|-------------|------------|
-| API rate limiting | High | Medium | Implement backoff, use multiple API keys |
-| Agent timeout/failure | High | Medium | Robust retry logic, save checkpoints |
-| Inconsistent translations | Medium | High | Use deterministic models, set temperature=0 |
-| High API costs | Medium | Medium | Monitor costs, implement budget limits |
-| Embedding model issues | Medium | Low | Use well-tested models, fallback options |
+| API rate limiting | High | Medium | Configurable wait time between sentences, use Gemini free tier |
+| Agent timeout/failure | High | Medium | Robust retry logic (3 attempts), save checkpoints |
+| Inconsistent translations | Medium | High | Use deterministic models, temperature=0 |
+| High API costs | Medium | Medium | Use Gemini free tier, configurable provider switching |
+| Embedding model issues | Medium | Low | Use well-tested models (all-MiniLM-L6-v2) |
+| Provider unavailable | Medium | Medium | Support for 2 API providers, easy switching |
 | Memory issues with 100 sentences | Low | Low | Process in batches, clear memory |
 
 ## 12. Future Enhancements

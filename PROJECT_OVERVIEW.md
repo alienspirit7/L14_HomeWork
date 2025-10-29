@@ -124,21 +124,26 @@ Edit `config.py` to customize:
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `NUM_SENTENCES` | 100 | Number of sentences to process |
+| `NUM_SENTENCES` | 30 | Number of sentences to process |
 | `MIN_WORDS` | 10 | Minimum words per sentence |
 | `MAX_WORDS` | 20 | Maximum words per sentence |
 | `AGENT_TIMEOUT` | 60 | Timeout in seconds |
 | `MAX_RETRIES` | 3 | Maximum retry attempts |
-| `TRANSLATION_MODEL` | gemini-2.0-flash-exp | Gemini API model to use |
+| `WAIT_TIME_BETWEEN_SENTENCES` | 30 | Wait seconds between sentences |
+| `API_PROVIDER` | gemini | API provider: "gemini" or "anthropic" |
+| `GEMINI_MODEL` | gemini-2.0-flash-exp | Gemini API model to use |
+| `ANTHROPIC_MODEL` | claude-3-5-sonnet-20241022 | Anthropic API model to use |
 | `EMBEDDING_MODEL` | all-MiniLM-L6-v2 | Sentence transformer model |
 
 ## 📈 Expected Results
 
 ### Typical Metrics
-- **Average Distance**: 0.2 - 0.5
-- **Variance**: 0.03 - 0.08
-- **Processing Time**: 15-30 minutes
-- **API Cost**: $0.50 - $2.00
+- **Average Distance**: 0.1 - 0.3
+- **Variance**: 0.002 - 0.05
+- **Processing Time**: ~15 minutes (30 sentences with 30s wait)
+- **API Cost**:
+  - Gemini: FREE (free tier)
+  - Anthropic: ~$0.10-$0.30
 
 ### Output Files
 1. **translation_results.json** (~500KB)
@@ -154,16 +159,17 @@ Edit `config.py` to customize:
 ## 🛠️ Module Details
 
 ### sentence_generator.py
-- Uses GPT model to generate diverse sentences
+- Uses AI models (Gemini or Anthropic) to generate diverse sentences
 - Validates word count (10-20 words)
 - Fallback to template-based generation
 - Ensures variety across topics
 
 ### translation_agents.py
 - Three specialized agents (EN→RU, RU→HE, HE→EN)
-- Uses Gemini API for translations
+- Supports both Gemini and Anthropic APIs
 - Temperature=0 for deterministic results
 - Clean output handling
+- Configurable wait time between sentences
 
 ### agent_wrapper.py
 - Thread-based timeout implementation
@@ -222,7 +228,7 @@ Edit `config.py` to customize:
 
 | Issue | Solution |
 |-------|----------|
-| API key error | Set `GOOGLE_API_KEY` in `.env` |
+| API key error | Set `GOOGLE_API_KEY` or `ANTHROPIC_API_KEY` in `.env` |
 | Timeout errors | Increase `AGENT_TIMEOUT` in config |
 | Rate limits | Add delays, use different API key |
 | Memory issues | Reduce `NUM_SENTENCES` |
@@ -275,7 +281,8 @@ This project demonstrates:
 - Production-grade error handling
 
 Built with:
-- Google Gemini API models
+- Google Gemini API models (primary provider)
+- Anthropic Claude API models (alternative provider)
 - Sentence Transformers
 - scikit-learn
 - matplotlib

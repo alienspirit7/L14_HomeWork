@@ -16,9 +16,11 @@ Each sentence goes through this complete cycle, and the original and final Engli
 
 ## Features
 
-- **Automated Sentence Generation**: Creates 100 diverse English sentences (10-20 words each)
+- **Dual API Support**: Choose between Google Gemini (free tier) or Anthropic Claude
+- **Automated Sentence Generation**: Creates diverse English sentences (10-20 words each, configurable count)
 - **Multi-Agent Translation**: Three specialized translation agents working in sequence
 - **Robust Error Handling**: Automatic retry logic and timeout protection
+- **Rate Limit Management**: Configurable wait time between sentences
 - **Semantic Similarity Analysis**: Uses sentence embeddings and cosine distance
 - **Statistical Analysis**: Mean, variance, and distribution metrics
 - **Visualization**: Professional graphs showing quality degradation patterns
@@ -30,7 +32,9 @@ Each sentence goes through this complete cycle, and the original and final Engli
 ### Prerequisites
 
 - Python 3.8 or higher
-- Google Gemini API key ([Get one here](https://aistudio.google.com/app/apikey))
+- **API Key** (choose one):
+  - **Google Gemini API key** (recommended for free tier) - [Get one here](https://aistudio.google.com/app/apikey)
+  - **Anthropic API key** - [Get one here](https://console.anthropic.com/account/keys)
 
 ### Setup
 
@@ -46,8 +50,14 @@ pip install -r requirements.txt
 # Copy the template
 cp .env.template .env
 
-# Edit .env and add your Google Gemini API key
+# Edit .env and choose your API provider
+# Option 1: Using Gemini (Free tier available)
+# API_PROVIDER=gemini
 # GOOGLE_API_KEY=your-api-key-here
+
+# Option 2: Using Anthropic Claude
+# API_PROVIDER=anthropic
+# ANTHROPIC_API_KEY=your-api-key-here
 ```
 
 ## Usage
@@ -61,11 +71,13 @@ python main.py
 ```
 
 The pipeline will:
-1. Generate 100 English sentences
+1. Generate 30 English sentences (configurable)
 2. Translate each through EN → RU → HE → EN
 3. Calculate cosine distances
 4. Generate statistics and visualization
 5. Save results to `./results/` directory
+
+**Note:** The pipeline uses the API provider specified in your `.env` file (Gemini or Anthropic)
 
 ### Configuration
 
@@ -73,7 +85,7 @@ Edit `config.py` to customize settings:
 
 ```python
 # Sentence generation
-NUM_SENTENCES = 100        # Number of sentences to process
+NUM_SENTENCES = 30         # Number of sentences to process
 MIN_WORDS = 10            # Minimum words per sentence
 MAX_WORDS = 20            # Maximum words per sentence
 
@@ -81,9 +93,14 @@ MAX_WORDS = 20            # Maximum words per sentence
 AGENT_TIMEOUT = 60        # Seconds before timeout
 MAX_RETRIES = 3           # Maximum retry attempts
 RETRY_DELAY = 2           # Seconds between retries
+WAIT_TIME_BETWEEN_SENTENCES = 30  # Wait time to respect rate limits
+
+# API Provider
+API_PROVIDER = "gemini"   # Options: "gemini" or "anthropic"
 
 # Models
-TRANSLATION_MODEL = "gemini-2.0-flash-exp"  # Gemini API model for translation
+GEMINI_MODEL = "gemini-2.0-flash-exp"         # For Gemini provider
+ANTHROPIC_MODEL = "claude-3-5-sonnet-20241022"  # For Anthropic provider
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 ```
 
@@ -246,27 +263,54 @@ Partial results saved to: results/partial_results_47_sentences.json
 
 ## Cost Estimation
 
-Using Google Gemini API:
+**Using Google Gemini API** (Default):
 - **Per sentence**: 3 API calls (EN→RU, RU→HE, HE→EN)
-- **100 sentences**: ~300 API calls
-- **Estimated cost**: Free tier available, check current Gemini API pricing for accurate estimates
+- **30 sentences**: ~92 API calls
+- **Estimated cost**: **FREE** - Gemini API offers generous free tier limits
+- **Free tier**: 1,500 requests per day
+- [Check current pricing](https://ai.google.dev/pricing)
 
-*Note: Gemini API offers generous free tier limits*
+**Using Anthropic Claude API** (Alternative):
+- **Per sentence**: 3 API calls (EN→RU, RU→HE, HE→EN)
+- **30 sentences**: ~92 API calls
+- **Estimated cost**: ~$0.10-$0.30 (depending on model)
+- **Pricing**: Pay-as-you-go based on tokens
+- [Check current pricing](https://www.anthropic.com/pricing)
+
+*Recommendation: Use Gemini for development/testing (free tier), switch to Anthropic if needed for production*
 
 ## Troubleshooting
 
-### "Missing Google API key"
+### "Missing API key" Error
+**For Gemini:**
 - Ensure `.env` file exists with valid `GOOGLE_API_KEY`
+- Set `API_PROVIDER=gemini` in `.env`
 - Or set environment variable: `export GOOGLE_API_KEY=your-api-key-here`
+
+**For Anthropic:**
+- Ensure `.env` file exists with valid `ANTHROPIC_API_KEY`
+- Set `API_PROVIDER=anthropic` in `.env`
+- Or set environment variable: `export ANTHROPIC_API_KEY=your-api-key-here`
 
 ### "Timeout after 3 attempts"
 - Increase `AGENT_TIMEOUT` in `config.py`
 - Check internet connection
-- Verify API key is valid and has credits
+- Verify API key is valid and has sufficient quota/credits
+- Try switching to the alternative API provider
 
 ### "Model not found"
-- Update `TRANSLATION_MODEL` in `config.py`
-- Use supported Gemini API models: `gemini-2.0-flash-exp`, `gemini-1.5-pro`, `gemini-1.5-flash`
+**For Gemini:**
+- Update `GEMINI_MODEL` in `config.py`
+- Supported models: `gemini-2.0-flash-exp`, `gemini-1.5-pro`, `gemini-1.5-flash`
+
+**For Anthropic:**
+- Update `ANTHROPIC_MODEL` in `config.py`
+- Supported models: `claude-3-5-sonnet-20241022`, `claude-3-opus-20240229`, `claude-3-haiku-20240307`
+
+### Rate Limit Errors
+- Increase `WAIT_TIME_BETWEEN_SENTENCES` in `config.py` (default: 30 seconds)
+- Gemini free tier: 1,500 requests/day
+- Anthropic: Check your account tier limits
 
 ### Embedding model download fails
 - Ensure internet connection
@@ -424,7 +468,8 @@ For issues, questions, or suggestions:
 
 ## Acknowledgments
 
-- Google Gemini API for translation
+- Google Gemini API for translation (primary provider)
+- Anthropic Claude API for translation (alternative provider)
 - Sentence Transformers for embeddings
 - scikit-learn for similarity calculations
 - matplotlib for visualization

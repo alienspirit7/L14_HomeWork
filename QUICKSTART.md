@@ -9,7 +9,8 @@ pip install -r requirements.txt
 ```
 
 This will install:
-- google-generativeai (for translation)
+- google-generativeai (for Gemini translation)
+- anthropic (for Claude translation)
 - sentence-transformers (for embeddings)
 - numpy, scikit-learn (for calculations)
 - matplotlib (for visualization)
@@ -23,26 +24,35 @@ This will install:
 cp .env.template .env
 ```
 
-2. Edit `.env` and add your Google Gemini API key:
+2. **Choose your API provider** and edit `.env`:
+
+**Option A: Google Gemini (Recommended - Free Tier)**
 ```bash
+API_PROVIDER=gemini
 GOOGLE_API_KEY=your-actual-api-key-here
 ```
+Get your API key: https://aistudio.google.com/app/apikey
 
-Get your API key from: https://aistudio.google.com/app/apikey
+**Option B: Anthropic Claude**
+```bash
+API_PROVIDER=anthropic
+ANTHROPIC_API_KEY=your-actual-api-key-here
+```
+Get your API key: https://console.anthropic.com/account/keys
 
 ## Step 3: Test the Setup (Optional but Recommended)
 
-Run a quick test with just 3 sentences:
+Run a quick test with just 2 sentences:
 
 ```bash
 python test_pipeline.py
 ```
 
 This will:
-- Verify your API key works
+- Verify your API key works (Gemini or Anthropic)
 - Test all components
-- Run a mini pipeline with 3 sentences
-- Takes about 1-2 minutes
+- Run a mini pipeline with 2 sentences
+- Takes about 30-60 seconds
 
 ## Step 4: Run the Full Pipeline
 
@@ -51,14 +61,16 @@ python main.py
 ```
 
 This will:
-- Generate 100 English sentences
+- Generate 30 English sentences (configurable)
 - Translate each through EN → RU → HE → EN
 - Calculate semantic drift for each
 - Generate statistics and visualization
 - Save results to `./results/` directory
 
-**Time**: 15-30 minutes
-**Cost**: Free tier available (using Gemini API)
+**Time**: ~15 minutes (with 30 second wait between sentences)
+**Cost**:
+- **Gemini**: FREE (free tier)
+- **Anthropic**: ~$0.10-$0.30
 
 ## Step 5: View Results
 
@@ -99,11 +111,20 @@ python -c "import json; data=json.load(open('results/translation_results.json'))
 
 ## Troubleshooting
 
-### "Missing Google API key"
-Make sure `.env` file exists and contains:
+### "Missing API key" Error
+**For Gemini:**
 ```
+API_PROVIDER=gemini
 GOOGLE_API_KEY=your-api-key-here
 ```
+
+**For Anthropic:**
+```
+API_PROVIDER=anthropic
+ANTHROPIC_API_KEY=your-api-key-here
+```
+
+Make sure `.env` file exists and contains the correct keys.
 
 ### "Module not found"
 Install dependencies:
@@ -112,17 +133,18 @@ pip install -r requirements.txt
 ```
 
 ### Pipeline is slow
-This is normal! Each sentence requires 3 API calls. For faster testing:
-1. Edit `config.py`: Set `NUM_SENTENCES = 10`
+This is normal! Each sentence requires 3 API calls plus wait time. For faster testing:
+1. Edit `config.py`: Set `NUM_SENTENCES = 10` and `WAIT_TIME_BETWEEN_SENTENCES = 10`
 2. Or use `test_pipeline.py` for quick tests
 
 ### Want to customize?
 
 Edit `config.py`:
 ```python
-NUM_SENTENCES = 50          # Fewer sentences = faster
-AGENT_TIMEOUT = 90          # Increase if timeouts occur
-TRANSLATION_MODEL = "gemini-1.5-flash"  # Faster model
+NUM_SENTENCES = 10              # Fewer sentences = faster
+WAIT_TIME_BETWEEN_SENTENCES = 10  # Reduce wait time for testing
+AGENT_TIMEOUT = 90              # Increase if timeouts occur
+API_PROVIDER = "gemini"         # Switch between "gemini" or "anthropic"
 ```
 
 ## What's Next?
@@ -141,16 +163,26 @@ For complete documentation, see:
 ## Quick Reference
 
 ```bash
-# Test setup (3 sentences)
+# Test setup (2 sentences)
 python test_pipeline.py
 
-# Run full pipeline (100 sentences)
+# Run full pipeline (30 sentences, ~15 min)
 python main.py
 
 # View results
 cat results/translation_results.json
 open results/distance_plot.png
 ```
+
+## API Provider Comparison
+
+| Feature | Gemini (Default) | Anthropic |
+|---------|-----------------|-----------|
+| Cost | FREE (free tier) | ~$0.10-$0.30 |
+| Speed | Fast | Fast |
+| Rate Limit | 1,500 req/day | Varies by tier |
+| Setup | `API_PROVIDER=gemini` | `API_PROVIDER=anthropic` |
+| Best For | Development/Testing | Production |
 
 ## Support
 
