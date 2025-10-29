@@ -273,6 +273,74 @@ Using Google Gemini API:
 - First run downloads the embedding model (~80MB)
 - Model is cached for subsequent runs
 
+## Sample Results
+
+Below are screenshots from an actual pipeline execution, demonstrating the complete workflow from initialization to final analysis.
+
+### Pipeline Initialization
+
+![Pipeline Start](./Images/Screenshot%202025-10-29%20at%2022.10.01.png)
+
+The pipeline begins by:
+- Checking prerequisites (API provider, API key, output directory)
+- Loading the embedding model
+- Displaying configuration settings (number of sentences, timeouts, wait times)
+- Confirming user readiness to proceed
+
+### Sentence Generation and Translation
+
+![Translation Processing](./Images/Screenshot%202025-10-29%20at%2022.20.43.png)
+
+Shows the core translation workflow:
+- **Step 1**: AI-generated diverse English sentences displayed
+- **Step 2**: Real-time translation chain (EN → RU → HE → EN) with timing
+- Progress bar showing completion percentage
+- Cosine distance calculated for each sentence
+- 60-second wait time between sentences to respect API rate limits
+
+### Translation Progress
+
+![Translation Progress](./Images/Screenshot%202025-10-29%20at%2022.21.02.png)
+
+Continued processing showing:
+- Multiple sentences being translated in sequence
+- Timing information for each translation step
+- Individual cosine distances ranging from 0.0576 to 0.2141
+- Progress tracking with estimated time remaining
+
+### Final Results and Statistics
+
+![Results Summary](./Images/Screenshot%202025-10-29%20at%2022.21.15.png)
+
+**Step 3: Analysis and Visualization** displays:
+- **Statistics Summary**:
+  - Average cosine distance: **0.1266**
+  - Variance: **0.0028**
+  - Standard deviation: **0.0532**
+  - Min distance: **0.0576** (highest similarity)
+  - Max distance: **0.2141** (lowest similarity)
+  - Median distance: **0.1071**
+- Output files saved to `./results/` directory
+- Total completion time: **2078.72 seconds** (~35 minutes for 5 sentences with 60s wait times)
+
+### Visualization Chart
+
+![Distance Plot](./results/distance_plot.png)
+
+The distance plot visualization shows:
+- **X-axis**: Sentence index (1 through N)
+- **Y-axis**: Cosine distance (semantic drift)
+- **Blue dots**: Individual sentence distances
+- **Red line**: Mean distance (0.1266)
+- **Shaded area**: Standard deviation band (±0.0532)
+- **Trend line**: Overall pattern of translation quality
+
+**Key Insights from Sample Run**:
+- Low average distance (0.1266) indicates good translation quality preservation
+- Small variance (0.0028) shows consistent translation performance
+- All distances below 0.25 suggest minimal semantic drift
+- The translation chain EN → RU → HE → EN maintains semantic integrity well
+
 ## Understanding the Results
 
 ### Cosine Distance

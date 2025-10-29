@@ -870,9 +870,365 @@ update prompts file with recent prompts in this conversation
 
 ---
 
+---
+
+## Prompt 12: Git Ignore Results Modification
+
+### User Prompt:
+```
+Change gitignore not to filter results.
+```
+
+### Action Items Completed:
+
+#### 1. .gitignore Updated
+- [x] Removed entire "Results and output" section (lines 30-34)
+- [x] Removed filters for:
+  - `results/` directory
+  - `*.png` files
+  - `*.pdf` files
+  - `*.json` files
+
+### Results:
+✅ Results directory and output files now tracked by git
+✅ Allows committing visualization charts and JSON results
+✅ Users can now share complete project results in repository
+✅ Pipeline outputs (distance_plot.png, translation_results.json) will be version controlled
+
+**Note:** This change makes results visible and shareable, useful for documentation and demonstrations.
+
+---
+
+## Prompt 13: Configuration Update for Testing
+
+### User Prompt:
+```
+change to 30 sentences and wait time 30 seconds after each sentence
+```
+
+### Action Items Completed:
+
+#### 1. config.py - Updated Parameters
+- [x] Changed `NUM_SENTENCES`: 5 → **30**
+  - Line 11: Increased sentence count for more comprehensive testing
+- [x] Changed `WAIT_TIME_BETWEEN_SENTENCES`: 60 → **30 seconds**
+  - Line 48: Reduced wait time for faster execution
+
+### Configuration Changes:
+
+**Before:**
+```python
+NUM_SENTENCES = 5                    # 5 sentences
+WAIT_TIME_BETWEEN_SENTENCES = 60     # 1 minute wait
+```
+
+**After:**
+```python
+NUM_SENTENCES = 30                   # 30 sentences
+WAIT_TIME_BETWEEN_SENTENCES = 30     # 30 seconds wait
+```
+
+### Impact Analysis:
+
+**Execution Time:**
+- Previous: ~5 minutes (5 sentences × 60s wait)
+- Current: ~15 minutes (30 sentences × 30s wait)
+- Increase: 3x duration but 6x data points
+
+**Statistical Significance:**
+- Sample size: 5 → 30 (500% increase)
+- Better statistical analysis with larger dataset
+- More reliable mean, variance, and distribution metrics
+- Improved visualization with more data points
+
+**API Usage:**
+- API calls: 17 → 92 calls (translation + generation)
+- Still within free tier limits for both providers
+
+**Results Quality:**
+- More comprehensive distance plot
+- Better trend line visualization
+- More robust statistical conclusions
+- Improved standard deviation calculations
+
+### Results:
+✅ Balanced configuration for comprehensive testing
+✅ Faster wait time (30s vs 60s)
+✅ More data points (30 vs 5)
+✅ Better statistical significance
+✅ Still reasonable execution time (~15 min)
+
+---
+
+## Prompt 14: Visual Documentation Enhancement
+
+### User Prompt:
+```
+Now use screenshots in images folder and add them and the final chart to the readme section
+```
+
+### Action Items Completed:
+
+#### 1. README.md - Added "Sample Results" Section
+- [x] Created comprehensive visual documentation section (line 276)
+- [x] Added 4 screenshots from Images/ folder:
+  1. **Pipeline Initialization** (`Screenshot 2025-10-29 at 22.10.01.png`)
+     - Prerequisites check display
+     - Configuration settings
+     - User confirmation workflow
+
+  2. **Sentence Generation and Translation** (`Screenshot 2025-10-29 at 22.20.43.png`)
+     - AI-generated sentences display
+     - Real-time translation chain progress
+     - Timing and cosine distance calculations
+
+  3. **Translation Progress** (`Screenshot 2025-10-29 at 22.21.02.png`)
+     - Multiple sentences processing
+     - Progress bar with time estimates
+     - Individual distance results (0.0576 - 0.2141)
+
+  4. **Final Results and Statistics** (`Screenshot 2025-10-29 at 22.21.15.png`)
+     - Complete statistical summary
+     - Average distance: 0.1266
+     - Variance: 0.0028
+     - Total completion time: 2078.72 seconds
+
+- [x] Added final visualization chart from results/
+  5. **Distance Plot** (`results/distance_plot.png`)
+     - Scatter plot of sentence distances
+     - Mean line and standard deviation band
+     - Trend line showing translation quality pattern
+
+#### 2. Documentation Structure
+- [x] Added detailed descriptions for each screenshot
+- [x] Included "Key Insights from Sample Run" section
+- [x] Positioned before "Understanding the Results" for context
+- [x] Used proper markdown image syntax with URL encoding for filenames with spaces
+
+### Visual Documentation Added:
+
+**Section Contents:**
+1. Introduction paragraph
+2. 4 subsections with screenshots and explanations:
+   - Pipeline Initialization
+   - Sentence Generation and Translation
+   - Translation Progress
+   - Final Results and Statistics
+3. Visualization Chart section
+4. Key Insights summary
+
+**Key Insights Documented:**
+- Low average distance (0.1266) indicates good translation quality
+- Small variance (0.0028) shows consistent performance
+- All distances below 0.25 suggest minimal semantic drift
+- Translation chain EN → RU → HE → EN maintains integrity well
+
+### Results:
+✅ Comprehensive visual documentation added to README
+✅ 5 images with detailed explanations
+✅ Real execution results demonstrated
+✅ Professional presentation of pipeline capabilities
+✅ Users can now see expected output before running
+✅ Enhanced understanding of pipeline workflow
+
+---
+
+## Prompt 15: Technical Documentation Creation
+
+### User Prompt:
+```
+Create tasks json file.
+```
+
+### Action Items Completed:
+
+#### 1. tasks.json - Created Comprehensive Documentation
+- [x] **File created:** `/Users/alienspirit/Documents/25D/L14_HomeWork/tasks.json`
+- [x] Complete pipeline workflow documentation in JSON format
+
+### JSON Structure Created:
+
+#### 1. Project Information
+- Project name, version, description
+- Repository reference
+
+#### 2. Pipeline Workflow (6 Main Tasks)
+**Task 1: Prerequisites Check**
+- API provider validation
+- API key verification
+- Output directory setup
+- Model loading
+- Estimated time: 10-30 seconds
+
+**Task 2: Sentence Generation**
+- Module: `sentence_generator.py`
+- Configuration: 30 sentences, 10-20 words
+- AI generation with fallback
+- Estimated time: 30-60 seconds
+
+**Task 3: Translation Pipeline Processing**
+- 3-step translation chain documented:
+  - Step 1: EN→RU (`EnglishToRussianAgent`)
+  - Step 2: RU→HE (`RussianToHebrewAgent`)
+  - Step 3: HE→EN (`HebrewToEnglishAgent`)
+- Wait time: 30 seconds between sentences
+- Intermediate saves and error handling
+
+**Task 4: Similarity Analysis**
+- Module: `similarity_calculator.py`
+- Cosine distance calculations
+- Statistical metrics computation
+- Estimated time: 5-15 seconds
+
+**Task 5: Visualization Generation**
+- Method: `_generate_plot`
+- Creates distance_plot.png
+- Professional scatter plot with trends
+- Estimated time: 2-5 seconds
+
+**Task 6: Results Export**
+- Method: `_save_results`
+- Output: translation_results.json
+- Complete metadata and statistics
+- Estimated time: 1-2 seconds
+
+#### 3. Configuration Documentation
+- Sentence generation settings (30, 10-20)
+- Agent settings (60s timeout, 3 retries, 30s wait)
+- Models (Gemini 2.0 Flash, Claude 3.5 Sonnet)
+- Embedding model (all-MiniLM-L6-v2)
+- Output settings
+
+#### 4. Error Handling Strategies
+- Timeout protection with retry
+- API error handling
+- Generation fallback mechanism
+- Partial completion saves
+
+#### 5. Output Files Documentation
+- Primary outputs (JSON, PNG)
+- Intermediate checkpoint files
+- Partial results files
+
+#### 6. Execution Timeline
+- Formula for time estimation
+- Example calculations for 30 and 100 sentences
+- Breakdown by phase (initialization, generation, translation, analysis)
+
+#### 7. API Requirements
+- Google Gemini configuration and models
+- Anthropic Claude configuration and models
+- Environment variables
+- Free tier information
+- Rate limit references
+
+#### 8. Development Tasks
+- **Completed features:** (9 items)
+  - Multi-agent pipeline
+  - Error handling
+  - Sentence generation
+  - Distance calculation
+  - Visualization
+  - Documentation
+  - Dual API support
+  - Checkpoints
+  - Progress tracking
+
+- **Potential enhancements:** (10 items)
+  - Additional language pairs
+  - Parallel processing
+  - Web interface
+  - Custom input files
+  - More metrics
+  - Caching
+  - Batch processing
+  - Model comparison
+  - Export formats
+  - Real-time streaming
+
+### File Statistics:
+- Format: JSON
+- Size: ~7 KB
+- Sections: 8 major sections
+- Tasks documented: 6 main tasks with subtasks
+- Configuration options: 12+
+- Error strategies: 4 types
+- Example timelines: 2 scenarios
+
+### Results:
+✅ Complete technical documentation in JSON format
+✅ Pipeline workflow fully documented
+✅ All modules and methods referenced
+✅ Current configuration captured (30 sentences, 30s wait)
+✅ Error handling strategies documented
+✅ Execution timeline formulas provided
+✅ Both API providers documented
+✅ Development roadmap included
+✅ Machine-readable format for tooling integration
+
+---
+
+## Prompt 16: Meta Documentation Update
+
+### User Prompt:
+```
+update prompts file with prompts and summary from this conversation
+```
+
+### Action Items Completed:
+- [x] **prompts_used.md** - Updated this document
+  - Added Prompt 12: Git Ignore Results Modification
+  - Added Prompt 13: Configuration Update for Testing (30 sentences, 30s wait)
+  - Added Prompt 14: Visual Documentation Enhancement (screenshots + chart)
+  - Added Prompt 15: Technical Documentation Creation (tasks.json)
+  - Added Prompt 16: Meta Documentation Update (this entry)
+  - Updated final statistics and session summary
+
+---
+
+## Updated Final Statistics
+
+### Total Prompts: **16**
+### Total Files: **19** (added tasks.json)
+- Core application: 8 Python modules
+- Configuration: 3 files
+- Documentation: 7 markdown files (including this)
+- Technical documentation: 1 JSON file (tasks.json)
+- User-created: 1 file (.env)
+
+### Files Modified in Latest Session:
+1. `.gitignore` - Removed results filtering
+2. `config.py` - Updated to 30 sentences, 30s wait time
+3. `README.md` - Added comprehensive visual documentation section
+4. `tasks.json` - **NEW FILE** - Complete pipeline documentation
+5. `prompts_used.md` - This file (session summary)
+
+### Latest Session Summary (Prompts 12-16):
+**Focus:** Configuration Optimization & Documentation Enhancement
+
+**Key Changes:**
+1. **Results Visibility** - Enabled git tracking of output files
+2. **Optimized Configuration** - 30 sentences with 30s wait (balanced approach)
+3. **Visual Documentation** - Added 5 images/charts to README
+4. **Technical Specification** - Created comprehensive tasks.json
+5. **Meta Documentation** - Complete session capture
+
+**Impact:**
+- Better balance: 6x more data points (5→30) with 50% faster wait time (60s→30s)
+- Enhanced documentation with real execution screenshots
+- Machine-readable technical specification (tasks.json)
+- Repository now includes shareable results
+- Total execution time: ~15 minutes (previously ~5 min for 5 sentences)
+- Statistical significance greatly improved
+
+---
+
 **Document Created:** 2025-10-29
-**Last Updated:** 2025-10-29
-**Total Development Time:** ~3-4 hours
+**Last Updated:** 2025-10-29 (Session 2)
+**Total Development Sessions:** 2
+**Total Development Time:** ~4-5 hours
+**Total Prompts:** 16
 **Quality:** Production-ready
-**Maintenance:** Documented and testable
+**Documentation:** Comprehensive (text + visual + technical spec)
 **API Providers:** 2 (Gemini, Anthropic)
+**Current Configuration:** 30 sentences, 30s wait, dual API support

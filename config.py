@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Sentence generation settings
-NUM_SENTENCES = 5
+NUM_SENTENCES = 30
 MIN_WORDS = 10
 MAX_WORDS = 20
 
@@ -45,4 +45,4 @@ TRANSLATION_MODEL = GEMINI_MODEL if API_PROVIDER == "gemini" else ANTHROPIC_MODE
 TEMPERATURE = 0.0  # For deterministic translations
 
 # Wait time between sentences (in seconds)
-WAIT_TIME_BETWEEN_SENTENCES = 60  # 1 minute wait between sentences
+WAIT_TIME_BETWEEN_SENTENCES = 30  # 30 seconds wait between sentences

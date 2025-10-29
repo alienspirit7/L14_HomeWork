@@ -1,0 +1,295 @@
+{
+  "project": {
+    "name": "Translation Quality Assessment Pipeline",
+    "version": "1.0.0",
+    "description": "Sequential multi-language translation quality evaluation system",
+    "repository": "L14_HomeWork"
+  },
+  "pipeline_workflow": {
+    "description": "Main pipeline execution flow",
+    "tasks": [
+      {
+        "id": "task_1",
+        "name": "Prerequisites Check",
+        "description": "Verify API keys, models, and output directory",
+        "module": "main.py",
+        "subtasks": [
+          "Check API provider configuration (Gemini/Anthropic)",
+          "Validate API key availability",
+          "Verify output directory exists or create it",
+          "Confirm translation model availability",
+          "Load embedding model"
+        ],
+        "dependencies": [],
+        "estimated_time": "10-30 seconds"
+      },
+      {
+        "id": "task_2",
+        "name": "Sentence Generation",
+        "description": "Generate diverse English sentences for translation",
+        "module": "sentence_generator.py",
+        "class": "SentenceGenerator",
+        "method": "generate_sentences",
+        "subtasks": [
+          "Configure generation parameters (count, min/max words)",
+          "Call AI model to generate sentences",
+          "Parse and validate generated sentences",
+          "Ensure word count constraints are met",
+          "Fallback to template-based generation if needed"
+        ],
+        "dependencies": ["task_1"],
+        "estimated_time": "30-60 seconds",
+        "configuration": {
+          "num_sentences": 30,
+          "min_words": 10,
+          "max_words": 20
+        }
+      },
+      {
+        "id": "task_3",
+        "name": "Translation Pipeline Processing",
+        "description": "Translate sentences through language chain",
+        "module": "pipeline.py",
+        "class": "TranslationQualityPipeline",
+        "method": "run",
+        "subtasks": [
+          "Initialize translation agents (EN→RU, RU→HE, HE→EN)",
+          "Process each sentence through translation chain",
+          "Calculate cosine distance for each sentence",
+          "Save intermediate results periodically",
+          "Handle errors and retries with timeout protection"
+        ],
+        "dependencies": ["task_2"],
+        "estimated_time": "Variable (depends on NUM_SENTENCES and WAIT_TIME)",
+        "translation_chain": [
+          {
+            "step": 1,
+            "agent": "EnglishToRussianAgent",
+            "source_language": "English",
+            "target_language": "Russian",
+            "module": "translation_agents.py"
+          },
+          {
+            "step": 2,
+            "agent": "RussianToHebrewAgent",
+            "source_language": "Russian",
+            "target_language": "Hebrew",
+            "module": "translation_agents.py"
+          },
+          {
+            "step": 3,
+            "agent": "HebrewToEnglishAgent",
+            "source_language": "Hebrew",
+            "target_language": "English",
+            "module": "translation_agents.py"
+          }
+        ],
+        "wait_time_between_sentences": 30
+      },
+      {
+        "id": "task_4",
+        "name": "Similarity Analysis",
+        "description": "Calculate semantic similarity metrics",
+        "module": "similarity_calculator.py",
+        "class": "SimilarityCalculator",
+        "subtasks": [
+          "Generate embeddings for original sentences",
+          "Generate embeddings for translated sentences",
+          "Calculate cosine distance for each pair",
+          "Compute statistical measures (mean, variance, std, min, max, median)"
+        ],
+        "dependencies": ["task_3"],
+        "estimated_time": "5-15 seconds",
+        "metrics": [
+          "cosine_distance",
+          "mean",
+          "variance",
+          "standard_deviation",
+          "min_distance",
+          "max_distance",
+          "median_distance"
+        ]
+      },
+      {
+        "id": "task_5",
+        "name": "Visualization Generation",
+        "description": "Create visual representation of results",
+        "module": "pipeline.py",
+        "method": "_generate_plot",
+        "subtasks": [
+          "Create scatter plot of cosine distances",
+          "Add mean line and standard deviation band",
+          "Add trend line",
+          "Configure plot styling and labels",
+          "Save plot to PNG file"
+        ],
+        "dependencies": ["task_4"],
+        "estimated_time": "2-5 seconds",
+        "output": "results/distance_plot.png"
+      },
+      {
+        "id": "task_6",
+        "name": "Results Export",
+        "description": "Save all results to JSON file",
+        "module": "pipeline.py",
+        "method": "_save_results",
+        "subtasks": [
+          "Compile metadata (timestamp, duration, counts)",
+          "Include all sentences and translations",
+          "Add statistical analysis",
+          "Format as JSON",
+          "Save to results directory"
+        ],
+        "dependencies": ["task_4", "task_5"],
+        "estimated_time": "1-2 seconds",
+        "output": "results/translation_results.json"
+      }
+    ]
+  },
+  "configuration": {
+    "sentence_generation": {
+      "NUM_SENTENCES": 30,
+      "MIN_WORDS": 10,
+      "MAX_WORDS": 20
+    },
+    "agent_settings": {
+      "AGENT_TIMEOUT": 60,
+      "MAX_RETRIES": 3,
+      "RETRY_DELAY": 2,
+      "WAIT_TIME_BETWEEN_SENTENCES": 30
+    },
+    "models": {
+      "translation": {
+        "gemini": "gemini-2.0-flash-exp",
+        "anthropic": "claude-3-5-sonnet-20241022"
+      },
+      "embedding": "sentence-transformers/all-MiniLM-L6-v2"
+    },
+    "output": {
+      "OUTPUT_DIR": "./results",
+      "SAVE_INTERMEDIATE": true,
+      "PLOT_FILENAME": "distance_plot.png",
+      "RESULTS_FILENAME": "translation_results.json"
+    }
+  },
+  "error_handling": {
+    "strategies": [
+      {
+        "type": "timeout",
+        "description": "Agent call exceeds timeout limit",
+        "action": "Retry with exponential backoff",
+        "max_attempts": 3,
+        "module": "agent_wrapper.py"
+      },
+      {
+        "type": "api_error",
+        "description": "API rate limit or service error",
+        "action": "Retry after delay",
+        "max_attempts": 3,
+        "module": "agent_wrapper.py"
+      },
+      {
+        "type": "generation_failure",
+        "description": "Sentence generation fails",
+        "action": "Fallback to template-based generation",
+        "module": "sentence_generator.py"
+      },
+      {
+        "type": "partial_completion",
+        "description": "Pipeline interrupted before completion",
+        "action": "Save partial results to intermediate file",
+        "module": "pipeline.py"
+      }
+    ]
+  },
+  "output_files": {
+    "primary": [
+      {
+        "filename": "translation_results.json",
+        "description": "Complete results with sentences, distances, and statistics",
+        "format": "JSON",
+        "location": "./results/"
+      },
+      {
+        "filename": "distance_plot.png",
+        "description": "Visualization of cosine distances",
+        "format": "PNG",
+        "location": "./results/"
+      }
+    ],
+    "intermediate": [
+      {
+        "filename": "intermediate_results_*.json",
+        "description": "Checkpoint files saved every 10 sentences",
+        "format": "JSON",
+        "location": "./results/"
+      },
+      {
+        "filename": "partial_results_*_sentences.json",
+        "description": "Results saved when pipeline is interrupted",
+        "format": "JSON",
+        "location": "./results/"
+      }
+    ]
+  },
+  "execution_timeline": {
+    "total_estimated_time_formula": "(NUM_SENTENCES * (3 * avg_translation_time + WAIT_TIME_BETWEEN_SENTENCES)) + initialization + analysis",
+    "example_30_sentences": {
+      "initialization": "30 seconds",
+      "sentence_generation": "45 seconds",
+      "translation_processing": "900 seconds (30 sentences * 30s wait time)",
+      "analysis_and_visualization": "20 seconds",
+      "total": "~16 minutes"
+    },
+    "example_100_sentences": {
+      "initialization": "30 seconds",
+      "sentence_generation": "60 seconds",
+      "translation_processing": "3000 seconds (100 sentences * 30s wait time)",
+      "analysis_and_visualization": "30 seconds",
+      "total": "~52 minutes"
+    }
+  },
+  "api_requirements": {
+    "providers": [
+      {
+        "name": "Google Gemini",
+        "env_variable": "GOOGLE_API_KEY",
+        "models": ["gemini-2.0-flash-exp", "gemini-1.5-pro", "gemini-1.5-flash"],
+        "free_tier": true,
+        "rate_limits": "Check Google AI Studio for current limits"
+      },
+      {
+        "name": "Anthropic Claude",
+        "env_variable": "ANTHROPIC_API_KEY",
+        "models": ["claude-3-5-sonnet-20241022", "claude-3-opus-20240229"],
+        "free_tier": false,
+        "rate_limits": "Check Anthropic Console for current limits"
+      }
+    ]
+  },
+  "development_tasks": {
+    "completed": [
+      "Implement multi-agent translation pipeline",
+      "Add error handling and retry logic",
+      "Create sentence generation system",
+      "Implement cosine distance calculation",
+      "Add visualization generation",
+      "Create comprehensive documentation",
+      "Add support for both Gemini and Anthropic APIs",
+      "Implement intermediate checkpoint saves",
+      "Add progress tracking and status display"
+    ],
+    "potential_enhancements": [
+      "Add support for additional language pairs",
+      "Implement parallel processing for faster execution",
+      "Add web interface for monitoring",
+      "Support for custom sentence input files",
+      "Add more similarity metrics (BLEU, ROUGE, etc.)",
+      "Implement caching for repeated translations",
+      "Add batch processing API calls",
+      "Create comparative analysis across different models",
+      "Add export to additional formats (CSV, Excel)",
+      "Implement real-time streaming results"
+    ]
+  }
+}
