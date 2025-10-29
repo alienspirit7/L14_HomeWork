@@ -1,0 +1,128 @@
+{
+  "metadata": {
+    "status": "PARTIAL - Pipeline stopped early",
+    "timestamp": "2025-10-29T23:19:21.265379",
+    "sentences_processed": 11,
+    "sentences_expected": 30
+  },
+  "statistics": {
+    "mean": 0.06369173526763916,
+    "variance": 0.001919521160158023,
+    "std": 0.04381234027255361,
+    "min": 0.0,
+    "max": 0.14982807636260986,
+    "median": 0.04597252607345581
+  },
+  "sentences": [
+    {
+      "index": 1,
+      "original_sentence": "The old oak tree stood sentinel, watching over generations of laughter and whispered secrets.",
+      "russian_translation": "Старый дуб стоял стражем, наблюдая за поколениями смеха и шепотом секретов.",
+      "hebrew_translation": "האלון הזקן ניצב כמשמר, צופה בדורות של צחוק ולחישות סודות.",
+      "final_sentence": "The old oak stood as a sentinel, watching generations of laughter and whispered secrets.",
+      "cosine_distance": 0.04116499423980713,
+      "processing_time": 2.7382261753082275,
+      "timestamp": "2025-10-29T23:13:17.217915"
+    },
+    {
+      "index": 2,
+      "original_sentence": "Quantum physics challenges our understanding of reality, revealing a strange and probabilistic universe.",
+      "russian_translation": "Квантовая физика бросает вызов нашему пониманию реальности, открывая странную и вероятностную вселенную.",
+      "hebrew_translation": "פיזיקת הקוונטים מאתגרת את ההבנה שלנו את המציאות, וחושפת יקום מוזר והסתברותי.",
+      "final_sentence": "Quantum physics challenges our understanding of reality, revealing a strange and probabilistic universe.",
+      "cosine_distance": 0.0,
+      "processing_time": 3.34303617477417,
+      "timestamp": "2025-10-29T23:13:50.566641"
+    },
+    {
+      "index": 3,
+      "original_sentence": "She savored the aroma of freshly brewed coffee, a comforting ritual before tackling the day's chaos.",
+      "russian_translation": "Она наслаждалась ароматом свежесваренного кофе, этим успокаивающим ритуалом перед тем, как окунуться в дневной хаос.",
+      "hebrew_translation": "היא נהנתה מניחוח הקפה הטרי, מהטקס המרגיע הזה לפני שצללה לתוך הכאוס היומיומי.",
+      "final_sentence": "She enjoyed the aroma of the fresh coffee, this soothing ritual before diving into the daily chaos.",
+      "cosine_distance": 0.11012303829193115,
+      "processing_time": 3.2262117862701416,
+      "timestamp": "2025-10-29T23:14:23.798588"
+    },
+    {
+      "index": 4,
+      "original_sentence": "Technological advancements in medicine offer hope for conquering previously incurable diseases.",
+      "russian_translation": "Технологические достижения в медицине вселяют надежду на победу над ранее неизлечимыми болезнями.",
+      "hebrew_translation": "ההתקדמות הטכנולוגית ברפואה מעוררת תקווה לניצחון על מחלות שבעבר לא היו ניתנות לריפוי.",
+      "final_sentence": "Technological advancements in medicine inspire hope for overcoming diseases that were once incurable.",
+      "cosine_distance": 0.05525970458984375,
+      "processing_time": 2.701146125793457,
+      "timestamp": "2025-10-29T23:14:56.505377"
+    },
+    {
+      "index": 5,
+      "original_sentence": "Ancient civilizations left behind intricate artifacts, hinting at complex social structures and beliefs.",
+      "russian_translation": "Древние цивилизации оставили после себя замысловатые артефакты, намекающие на сложные социальные структуры и верования.",
+      "hebrew_translation": "תרבויות עתיקות הותירו אחריהן חפצי אמנות מורכבים, המרמזים על מבנים חברתיים ואמונות מורכבות.",
+      "final_sentence": "Ancient cultures left behind intricate artifacts, hinting at complex social structures and beliefs.",
+      "cosine_distance": 0.04597252607345581,
+      "processing_time": 3.162843942642212,
+      "timestamp": "2025-10-29T23:15:29.671249"
+    },
+    {
+      "index": 6,
+      "original_sentence": "The vibrant coral reef teemed with life, a delicate ecosystem threatened by rising ocean temperatures.",
+      "russian_translation": "Яркий коралловый риф кипел жизнью, эта хрупкая экосистема находится под угрозой из-за повышения температуры океана.",
+      "hebrew_translation": "שונית האלמוגים הצבעונית תססה חיים, המערכת האקולוגית השברירית הזו נמצאת בסכנה עקב עליית טמפרטורת האוקיינוס.",
+      "final_sentence": "The colorful coral reef teemed with life; this fragile ecosystem is in danger due to rising ocean temperatures.",
+      "cosine_distance": 0.11207056045532227,
+      "processing_time": 2.775692939758301,
+      "timestamp": "2025-10-29T23:16:02.452397"
+    },
+    {
+      "index": 7,
+      "original_sentence": "He found solace in writing poetry, expressing emotions that words often failed to capture adequately.",
+      "russian_translation": "Он находил утешение в написании стихов, выражая эмоции, которые слова часто не могли адекватно передать.",
+      "hebrew_translation": "הוא מצא נחמה בכתיבת שירים, מבטא רגשות שמילים לעתים קרובות לא יכלו להעביר כראוי.",
+      "final_sentence": "He found solace in writing songs, expressing emotions that words often couldn't properly convey.",
+      "cosine_distance": 0.14982807636260986,
+      "processing_time": 2.817445993423462,
+      "timestamp": "2025-10-29T23:16:35.274268"
+    },
+    {
+      "index": 8,
+      "original_sentence": "The city skyline glittered at night, a testament to human ambition and architectural innovation.",
+      "russian_translation": "Ночной горизонт города сверкал, являясь свидетельством человеческих амбиций и архитектурных инноваций.",
+      "hebrew_translation": "קו הרקיע הלילי של העיר נצץ, והיה עדות לשאפתנות האנושית ולחדשנות אדריכלית.",
+      "final_sentence": "The city's night skyline glittered, a testament to human ambition and architectural innovation.",
+      "cosine_distance": 0.014842569828033447,
+      "processing_time": 2.8222310543060303,
+      "timestamp": "2025-10-29T23:17:08.100752"
+    },
+    {
+      "index": 9,
+      "original_sentence": "Sustainable agriculture practices are crucial for ensuring food security in a changing climate.",
+      "russian_translation": "Устойчивые методы ведения сельского хозяйства имеют решающее значение для обеспечения продовольственной безопасности в условиях меняющегося климата.",
+      "hebrew_translation": "שיטות חקלאות בנות-קיימא חיוניות להבטחת ביטחון תזונתי בעידן של שינויי אקלים.",
+      "final_sentence": "Sustainable agricultural practices are essential for ensuring food security in an era of climate change.",
+      "cosine_distance": 0.03557848930358887,
+      "processing_time": 2.349463939666748,
+      "timestamp": "2025-10-29T23:17:40.455892"
+    },
+    {
+      "index": 10,
+      "original_sentence": "Learning a new language opens doors to different cultures and broadens your perspective.",
+      "russian_translation": "Изучение нового языка открывает двери в другие культуры и расширяет ваш кругозор.",
+      "hebrew_translation": "לימוד שפה חדשה פותח דלתות לתרבויות אחרות ומרחיב את אופקיכם.",
+      "final_sentence": "Learning a new language opens doors to other cultures and broadens your horizons.",
+      "cosine_distance": 0.04510331153869629,
+      "processing_time": 2.5425407886505127,
+      "timestamp": "2025-10-29T23:18:13.002334"
+    },
+    {
+      "index": 11,
+      "original_sentence": "The detective meticulously examined the evidence, searching for a clue that would break the case.",
+      "russian_translation": "Детектив тщательно изучил улики, в поисках зацепки, которая помогла бы раскрыть дело.",
+      "hebrew_translation": "הבלש בחן בקפידה את הראיות, בחיפוש אחר קצה חוט שיעזור לפענח את התיק.",
+      "final_sentence": "The detective carefully examined the evidence, searching for a clue that would help solve the case.",
+      "cosine_distance": 0.09066581726074219,
+      "processing_time": 2.862445831298828,
+      "timestamp": "2025-10-29T23:18:45.866292"
+    }
+  ]
+}
