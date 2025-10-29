@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "timestamp": "2025-10-29T22:01:02.079947",
+    "total_sentences": 5,
+    "start_time": "2025-10-29T21:26:23.358085",
+    "end_time": null,
+    "duration_seconds": null,
+    "config": {
+      "num_sentences": 5,
+      "min_words": 10,
+      "max_words": 20,
+      "agent_timeout": 60,
+      "max_retries": 3,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "translation_model": "gemini-2.0-flash-exp"
+    }
+  },
+  "statistics": {
+    "mean": 0.12663617134094238,
+    "variance": 0.0028276575367806346,
+    "std": 0.05317572319001063,
+    "min": 0.05756455659866333,
+    "max": 0.2140854001045227,
+    "median": 0.10706847906112671
+  },
+  "sentences": [
+    {
+      "index": 1,
+      "original_sentence": "1. The rapid evolution of AI is reshaping industries and challenging our understanding of intelligence.",
+      "russian_translation": "Стремительная эволюция ИИ преобразует отрасли и ставит под сомнение наше понимание интеллекта.",
+      "hebrew_translation": "האבולוציה המהירה של הבינה המלאכותית משנה תעשיות ומטילה ספק בהבנתנו את האינטליגנציה.",
+      "final_sentence": "The rapid evolution of artificial intelligence is transforming industries and challenging our understanding of intelligence.",
+      "cosine_distance": 0.10706847906112671,
+      "processing_time": 3.892530918121338,
+      "timestamp": "2025-10-29T21:26:30.300755"
+    },
+    {
+      "index": 2,
+      "original_sentence": "2. Sunlight filtered through the ancient oak leaves, painting dappled patterns on the forest floor.",
+      "russian_translation": "Солнечный свет пробивался сквозь листву старого дуба, рисуя пятнистые узоры на лесной подстилке.",
+      "hebrew_translation": "אור השמש חדר מבעד לעלוות עץ אלון עתיק, וצייר דוגמאות מנומרות על קרקעית היער.",
+      "final_sentence": "Sunlight filtered through the leaves of an ancient oak tree, painting dappled patterns on the forest floor.",
+      "cosine_distance": 0.05756455659866333,
+      "processing_time": 3.0399980545043945,
+      "timestamp": "2025-10-29T21:27:33.346765"
+    },
+    {
+      "index": 3,
+      "original_sentence": "3.  Every morning, she enjoys a strong cup of coffee while listening to the birds sing.",
+      "russian_translation": "3. Каждое утро она наслаждается крепкой чашкой кофе, слушая пение птиц.",
+      "hebrew_translation": "בכל בוקר היא נהנית מספל קפה חזק, תוך כדי האזנה לשירת הציפורים.",
+      "final_sentence": "Every morning she enjoys a strong cup of coffee while listening to the birds singing.",
+      "cosine_distance": 0.15308105945587158,
+      "processing_time": 2.628213882446289,
+      "timestamp": "2025-10-29T21:28:35.917784"
+    },
+    {
+      "index": 4,
+      "original_sentence": "4.  Scientists are exploring the mysteries of dark matter, hoping to unlock secrets of the universe.",
+      "russian_translation": "4. Ученые исследуют тайны темной материи, надеясь раскрыть секреты вселенной.",
+      "hebrew_translation": "מדענים חוקרים את סודות החומר האפל, בתקווה לחשוף את סודות היקום.",
+      "final_sentence": "Scientists are researching the secrets of dark matter, hoping to uncover the secrets of the universe.",
+      "cosine_distance": 0.2140854001045227,
+      "processing_time": 3.5324761867523193,
+      "timestamp": "2025-10-29T21:57:32.818329"
+    },
+    {
+      "index": 5,
+      "original_sentence": "5.  The vibrant murals in Buenos Aires tell stories of the city's rich history and cultural identity.",
+      "russian_translation": "Яркие муралы Буэнос-Айреса рассказывают истории о богатой истории и культурной самобытности города.",
+      "hebrew_translation": "ציורי הקיר הססגוניים של בואנוס איירס מספרים סיפורים על ההיסטוריה העשירה והזהות התרבותית הייחודית של העיר.",
+      "final_sentence": "Buenos Aires' colorful murals tell stories about the city's rich history and unique cultural identity.",
+      "cosine_distance": 0.10138136148452759,
+      "processing_time": 2.8814151287078857,
+      "timestamp": "2025-10-29T22:01:01.632761"
+    }
+  ]
+}

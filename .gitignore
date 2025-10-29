@@ -27,12 +27,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# Results and output
-results/
-*.png
-*.pdf
-*.json
-
 # Jupyter Notebook
 .ipynb_checkpoints
 

@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "status": "PARTIAL - Pipeline stopped early",
+    "timestamp": "2025-10-29T00:56:55.710327",
+    "sentences_processed": 3,
+    "sentences_expected": 5
+  },
+  "statistics": {
+    "mean": 0.07409920295079549,
+    "variance": 0.0002664028205769695,
+    "std": 0.01632185101564677,
+    "min": 0.053544461727142334,
+    "max": 0.09347224235534668,
+    "median": 0.07528090476989746
+  },
+  "sentences": [
+    {
+      "index": 1,
+      "original_sentence": "The rapid evolution of AI is reshaping industries and challenging our understanding of intelligence.",
+      "russian_translation": "Быстрая эволюция ИИ преобразует отрасли и ставит под сомнение наше понимание интеллекта.",
+      "hebrew_translation": "האבולוציה המהירה של הבינה המלאכותית משנה תעשיות ומטילה ספק בהבנתנו את האינטליגנציה.",
+      "final_sentence": "The rapid evolution of artificial intelligence is transforming industries and challenging our understanding of intelligence.",
+      "cosine_distance": 0.07528090476989746,
+      "processing_time": 2.587160110473633,
+      "timestamp": "2025-10-29T00:56:45.229951"
+    },
+    {
+      "index": 2,
+      "original_sentence": "Sunlight filtering through the ancient oak leaves painted dappled patterns on the forest floor.",
+      "russian_translation": "Солнечный свет, пробивающийся сквозь листву старого дуба, рисовал пятнистые узоры на лесной подстилке.",
+      "hebrew_translation": "אור השמש, שחדר מבעד לעלוות עץ אלון עתיק, צייר דוגמאות מנומרות על קרקעית היער.",
+      "final_sentence": "The sunlight, penetrating through the foliage of an ancient oak tree, painted dappled patterns on the forest floor.",
+      "cosine_distance": 0.09347224235534668,
+      "processing_time": 2.7816290855407715,
+      "timestamp": "2025-10-29T00:56:48.011723"
+    },
+    {
+      "index": 3,
+      "original_sentence": "Every morning, I savor a strong cup of coffee while listening to the birds sing.",
+      "russian_translation": "Каждое утро я наслаждаюсь крепким кофе, слушая пение птиц.",
+      "hebrew_translation": "בכל בוקר אני נהנה מקפה חזק, תוך כדי האזנה לשירת הציפורים.",
+      "final_sentence": "Every morning I enjoy a strong coffee while listening to the birds singing.",
+      "cosine_distance": 0.053544461727142334,
+      "processing_time": 2.7344791889190674,
+      "timestamp": "2025-10-29T00:56:50.746347"
+    }
+  ]
+}
