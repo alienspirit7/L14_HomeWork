@@ -14,6 +14,193 @@ English → Russian → Hebrew → English
 
 Each sentence goes through this complete cycle, and the original and final English versions are compared.
 
+## Workflow Schema
+
+The pipeline follows a structured workflow with error handling, checkpoints, and analysis stages:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                     1. INITIALIZATION & SETUP                       │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Load configuration (config.py + .env)                            │
+│  • Validate API provider (Gemini or Anthropic)                      │
+│  • Check API key availability                                       │
+│  • Create results directory                                         │
+│  • Load embedding model (sentence-transformers)                     │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                   2. SENTENCE GENERATION                            │
+├─────────────────────────────────────────────────────────────────────┤
+│  • SentenceGenerator creates N sentences (default: 30)              │
+│  • Each sentence: 10-20 words                                       │
+│  • AI-generated diverse content                                     │
+│  • Fallback to template-based if generation fails                   │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│          3. TRANSLATION PIPELINE (For each sentence)                │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   Original English Sentence                                         │
+│            │                                                        │
+│            ▼                                                        │
+│   ┌──────────────────┐    ┌─────────────────────┐                 │
+│   │  Agent Wrapper   │───▶│  Retry Logic (3x)   │                 │
+│   │  with Timeout    │    │  Exponential Backoff│                 │
+│   └──────────────────┘    └─────────────────────┘                 │
+│            │                                                        │
+│            ▼                                                        │
+│   ┌──────────────────────────────────────────────┐                 │
+│   │  EnglishToRussianAgent (EN → RU)             │                 │
+│   │  • API call to Gemini/Anthropic              │                 │
+│   │  • Timeout: 60s (configurable)               │                 │
+│   └──────────────────────┬───────────────────────┘                 │
+│                          │                                          │
+│                          ▼                                          │
+│   ┌──────────────────────────────────────────────┐                 │
+│   │  RussianToHebrewAgent (RU → HE)              │                 │
+│   │  • API call to Gemini/Anthropic              │                 │
+│   │  • Timeout: 60s (configurable)               │                 │
+│   └──────────────────────┬───────────────────────┘                 │
+│                          │                                          │
+│                          ▼                                          │
+│   ┌──────────────────────────────────────────────┐                 │
+│   │  HebrewToEnglishAgent (HE → EN)              │                 │
+│   │  • API call to Gemini/Anthropic              │                 │
+│   │  • Timeout: 60s (configurable)               │                 │
+│   └──────────────────────┬───────────────────────┘                 │
+│                          │                                          │
+│                          ▼                                          │
+│                 Final English Sentence                              │
+│                                                                     │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                4. SIMILARITY CALCULATION                            │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Generate embeddings for original sentence                        │
+│  • Generate embeddings for final sentence                           │
+│  • Calculate cosine distance between embeddings                     │
+│  • Store result with sentence metadata                              │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                  5. CHECKPOINT MANAGEMENT                           │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Save intermediate results every 10 sentences                     │
+│  • Files: intermediate_results_10.json, _20.json, etc.             │
+│  • Allows recovery from interruptions                               │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│               6. RATE LIMIT MANAGEMENT                              │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Wait between sentences (default: 30s)                            │
+│  • Prevents API rate limit errors                                   │
+│  • Configurable via WAIT_TIME_BETWEEN_SENTENCES                     │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           │ (Repeat steps 3-6 for each sentence)
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                  7. STATISTICAL ANALYSIS                            │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Calculate mean cosine distance                                   │
+│  • Calculate variance and standard deviation                        │
+│  • Identify min/max distances                                       │
+│  • Calculate median                                                 │
+│  • Generate distribution metrics                                    │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                    8. VISUALIZATION                                 │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Create scatter plot of cosine distances                          │
+│  • Add mean line and standard deviation band                        │
+│  • Add trend line                                                   │
+│  • Save as PNG: distance_plot.png                                   │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                   9. RESULTS OUTPUT                                 │
+├─────────────────────────────────────────────────────────────────────┤
+│  • Save complete results to translation_results.json                │
+│  • Include metadata (timestamp, duration, config)                   │
+│  • Include all sentences and translations                           │
+│  • Include all cosine distances                                     │
+│  • Include statistical analysis                                     │
+│  • Generate final summary report                                    │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Workflow States and Error Handling
+
+The pipeline implements robust error handling at each stage:
+
+**Success Path**: Configuration → Generation → Translation (×N) → Analysis → Output
+
+**Error Scenarios**:
+- **API Key Missing**: Stop at initialization, prompt user
+- **Model Loading Fails**: Stop at initialization, show error
+- **Sentence Generation Fails**: Fall back to template-based generation
+- **Translation Timeout**: Retry up to 3 times with exponential backoff
+- **Translation Max Retries Exceeded**: Save partial results and exit gracefully
+- **Rate Limit Hit**: Wait and retry automatically
+- **User Interruption (Ctrl+C)**: Save partial results to recovery file
+
+### Data Flow
+
+```
+Input Configuration → Sentence Generation → Translation Chain →
+Embeddings → Cosine Distance → Statistics → Visualization → JSON/PNG Output
+```
+
+### Component Interaction
+
+```
+main.py
+  │
+  └──▶ pipeline.py (TranslationQualityPipeline)
+         │
+         ├──▶ sentence_generator.py (SentenceGenerator)
+         │     └──▶ Gemini/Anthropic API (sentence generation)
+         │
+         ├──▶ translation_agents.py (TranslationPipeline)
+         │     │
+         │     ├──▶ agent_wrapper.py (AgentWrapper with retry/timeout)
+         │     │     │
+         │     │     ├──▶ EnglishToRussianAgent
+         │     │     │     └──▶ Gemini/Anthropic API
+         │     │     │
+         │     │     ├──▶ RussianToHebrewAgent
+         │     │     │     └──▶ Gemini/Anthropic API
+         │     │     │
+         │     │     └──▶ HebrewToEnglishAgent
+         │     │           └──▶ Gemini/Anthropic API
+         │     │
+         │     └──▶ Returns: (original, russian, hebrew, final_english)
+         │
+         ├──▶ similarity_calculator.py (SimilarityCalculator)
+         │     │
+         │     ├──▶ sentence-transformers (embedding model)
+         │     ├──▶ cosine_distance calculation
+         │     └──▶ statistical analysis
+         │
+         └──▶ Output Generation
+               ├──▶ JSON export (translation_results.json)
+               ├──▶ Matplotlib visualization (distance_plot.png)
+               └──▶ Intermediate checkpoints (intermediate_results_*.json)
+```
+
 ## Features
 
 - **Dual API Support**: Choose between Google Gemini (free tier) or Anthropic Claude
